@@ -18,7 +18,7 @@ typedef struct stack {
 
 int	is_sorted(stack	**stk);
 void	sort_three(stack **stk);
-void	free_split(char **argv);
+void	free_split(char **argv, int argc);
 size_t	count_elem(stack **stk);
 void	reverse_rotate(stack **stk);
 void	rra(stack **a);
@@ -38,7 +38,7 @@ void	ss(stack **a, stack **b);
 int	check_duplicate(stack	**a);
 int	check_arg(char	*arg);
 void	free_stack(stack **a);
-void	create_stack(stack **a, char **argv);
+void	create_stack(stack **a, char **argv, size_t argc, size_t i);
 void	sort_stack(stack **a, stack **b, size_t nb_node);
 size_t	set_index(stack **a);
 void	init_a(stack **a, stack **b);
@@ -56,6 +56,9 @@ void	set_target_b(stack **a, stack **b, size_t nb_node);
 stack	*find_min(stack **stk);
 void	move_b_to_a(stack	**a, stack **b);
 void	min_on_top(stack **a);
-
+void	init_stack(stack **a, char **argv);
+char	**create_tab(char **tab, char **argv, int argc);
+size_t	ft_strlen(char *str);
+size_t	nb_nodes(char **argv);
 
 #endif

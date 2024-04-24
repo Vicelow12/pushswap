@@ -76,7 +76,6 @@ void	set_target_b(stack **a, stack **b, size_t nb_node)
 	}
 	if (check == 0)
 		cur_b->target = find_min(a);
-
 }
 void	init_b(stack **a, stack **b, size_t nb_node)
 {
@@ -99,18 +98,9 @@ stack	*get_cheapest(stack **stk)
 	}
 	return (NULL);
 }
-void 	move_a_to_b(stack	**a, stack	**b)
+void	move_1(stack **a, stack	**b, stack *cheapest)
 {
-	stack	*cheapest;
-	size_t	len_a;
-	size_t	len_b;
-
-	len_a = count_elem(a);
-	len_b = count_elem(b);
-	cheapest = get_cheapest(a);
-	if (cheapest->move_strat == 1)
-	{
-		while(cheapest->pos > 0 && cheapest->target->pos >0)
+	while(cheapest->pos > 0 && cheapest->target->pos >0)
 		{
 			rr(a,b);
 			cheapest->pos--;
@@ -126,42 +116,56 @@ void 	move_a_to_b(stack	**a, stack	**b)
 			rb(b);
 			cheapest->target->pos--;
 		}
-	}
-	else if (cheapest->move_strat == 2)
+}
+
+void	move_2(stack **a, stack	**b, stack *cheapest)
+{
+	size_t	len_a;
+	size_t	len_b;
+
+	len_a = count_elem(a);
+	len_b = count_elem(b);
+	while(cheapest->pos < len_a && cheapest->target->pos < len_b)
 	{
-		while(cheapest->pos < len_a && cheapest->target->pos < len_b)
-		{
-			rrr(a,b);
-			cheapest->pos++;
-			cheapest->target->pos++;
-		}
-		while(cheapest->pos < len_a)
-		{
-			rra(a);
-			cheapest->pos++;
-		}
-		while(cheapest->target->pos < len_b)
-		{
-			rrb(b);
-			cheapest->target->pos++;
-		}
+		rrr(a,b);
+		cheapest->pos++;
+		cheapest->target->pos++;
 	}
-	else if (cheapest->move_strat == 3)
+	while(cheapest->pos < len_a)
 	{
-		while(cheapest->pos > 0)
-		{
-			ra(a);
-			cheapest->pos--;
-		}
-		while(cheapest->target->pos < len_b)
-		{
-			rrb(b);
-			cheapest->target->pos++;
-		}
+		rra(a);
+		cheapest->pos++;
 	}
-	else if (cheapest->move_strat == 4)
+	while(cheapest->target->pos < len_b)
 	{
-		while(cheapest->pos < len_a)
+		rrb(b);
+		cheapest->target->pos++;
+	}
+}
+
+void	move_3(stack **a, stack	**b, stack *cheapest)
+{
+	size_t	len_b;
+
+	len_b = count_elem(b);
+	while(cheapest->pos > 0)
+	{
+		ra(a);
+		cheapest->pos--;
+	}
+	while(cheapest->target->pos < len_b)
+	{
+		rrb(b);
+		cheapest->target->pos++;
+	}
+}
+
+void	move_4(stack **a, stack	**b, stack *cheapest)
+{
+	size_t	len_a;
+
+	len_a = count_elem(a);
+	while(cheapest->pos < len_a)
 		{
 			rra(a);
 			cheapest->pos++;
@@ -171,7 +175,20 @@ void 	move_a_to_b(stack	**a, stack	**b)
 			rb(b);
 			cheapest->target->pos--;
 		}
-	}
+}
+void 	move_a_to_b(stack	**a, stack	**b)
+{
+	stack	*cheapest;
+
+	cheapest = get_cheapest(a);
+	if (cheapest->move_strat == 1)
+		move_1(a, b, cheapest);
+	else if (cheapest->move_strat == 2)
+		move_2(a, b, cheapest);
+	else if (cheapest->move_strat == 3)
+		move_3(a, b, cheapest);
+	else if (cheapest->move_strat == 4)
+		move_4(a, b, cheapest);
 	pb(a, b);
 }
 	
@@ -361,9 +378,7 @@ size_t	set_index(stack **a)
 }
 void	sort_stack(stack **a, stack **b, size_t nb_node)
 {
-	int	len_a;
-
-
+	size_t	len_a;
 
 	len_a = count_elem(a) - 1;
 	pb(a, b);
@@ -407,9 +422,7 @@ void	sort_three(stack **stk)
 	i = 0;
 	cur = *stk;
 	max = *stk;
-	if (!cur || count_elem(stk) != 3)
-		return;
-	if (is_sorted(stk))
+	if (!cur || count_elem(stk) != 3 || is_sorted(stk))
 		return;
 	while (cur->next != NULL)
 	{
@@ -420,25 +433,20 @@ void	sort_three(stack **stk)
 			i++;
 		}
 	}
-
 	if (i == 0)
 		ra(stk);
 	else if (i == 1)
 		rra(stk);
-
-
-
 	if (!is_sorted(stk))
 		sa(stk);
-
 }
 
-void	free_split(char **argv)
+void	free_split(char **argv, int argc)
 {
 	size_t	i;
 
 	i = 0;
-	while (argv[i] != NULL)
+	while (i < argc)
 	{
 		free(argv[i]);
 		i++;
@@ -515,15 +523,12 @@ void	free_stack(stack **a)
 		free(mem);
 	}
 }
-void	create_stack(stack **a, char **argv)
+void	create_stack(stack **a, char **argv, size_t argc, size_t i)
 {
 	stack	*new_node;
 	stack	*cur;
-	ssize_t	i;
 
-	i = 0;
-	
-	while (argv[i] != NULL)
+	while (i < argc)
 	{
 		new_node = malloc(sizeof(stack));
 		if (!new_node)
@@ -537,63 +542,106 @@ void	create_stack(stack **a, char **argv)
 		}
 		else
 		{
-			// cur = *a;
-			// while (cur->next != NULL)
-			// 	cur = cur->next;
 			cur->next = new_node;
 			cur = cur->next;
 		}
 		i++;
 	}
+}
+size_t	nb_nodes(char **argv)
+{
+	size_t	i;
+
+	i = 0;
+	while (argv[i] != NULL)
+	{
+		i++;
+	}
+	return((int)i);
+}
+void	init_stack(stack **a, char **argv)
+{
+	size_t	i;
+	size_t	j;
+	size_t	nb_node;
 	
+	i = 0;
+	j = 0;
+	nb_node = nb_nodes(argv);
+	while (i < nb_node)
+	{
+		if (!check_arg(argv[i]))
+			exit(1);
+		i++;
+	}
+	create_stack(a, argv, nb_node, j);
+	free_split(argv, nb_node);
+	if (!check_duplicate(a))
+		exit(1);
 }
 
-int main(int argc, char** argv) 
+size_t	ft_strlen(char *str)
+{
+	size_t	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
+}
+char	**create_tab(char **tab, char **argv, int argc)
+{
+		size_t	i;
+		size_t	j;
+
+		i = 0;
+		tab = malloc(sizeof(char *) * (argc));
+		if (!tab)
+			return (0);
+		while(i < argc - 1)
+		{
+			j = 0;
+			tab[i] = ft_strdup(argv[i + 1]);
+			if (!tab[i])
+			{
+				free_split(tab, i);
+				return(NULL);
+			}
+			i++;
+		}
+		tab[i] = NULL;
+		return (tab);
+}
+int	main(int argc, char** argv) 
 {
     stack   *a;
 	stack	*b;
-	stack	*cur;
+//	stack	*cur;
 	size_t	nb_node;
+	char	**tab;
 
-	// argc = 6;
-	// argv[1] = " 983 -534 -598 -240 986 257 893 729 678 -34 978 395 625 401 -118 -656 405 319 -577 -233 413 -172 -674 348 -802 428 754 780 -425 394 -202 -837 840 -459 -646 -88 -401 -819 -471 885 -373 -474 554 -349 353 -675 -326 673 199 138 414 -468 -831 -137 976 755 -666 -439 -561 834 -315 83 101 -662 -493 914 -782 141 -896 373 708 931 249 483 407 -352 -985 830 567 -925 54 -524 74 734 831 909 23 64 71 204 130 -975 655 163 -231 191 -190 -398 314 122 901 -84 547 87 985 -171 0 511 378 -563 737 676 969 -226 -521 -777 -407 -791 -444 654 -215 -965 677 -70 887 -266 -977 231 86 -419 72 699 -181 728 -574 170 193 -375 -735 702 -119 -870 -54 410 -867 658 -247 942 -308 739 -440 720 -706 -856 37 224 903 -982 -718 513 352 367 -681 374 57 82 -719 -301 13 -864 941 294 717 506 768 452 117 911 321 -639 864 680 -973 -477 -93 -63 -957 -807 -142 44 951 -618 -509 -535 650 -725 -657 383 -391 -243 229 804 -920 -33 -331 -219 -105 512 30 -3 549 -752 167 -806 -31 -436 -463 859 148 925 -416 583 696 255 -242 -381 420 -465 -64 897 771 -597 -151 266 -602 557 -485 765 787 614 92 528 -410 -293 -152 327 473 -188 -548 642 -265 -686 411 447 -555 609 -940 884 -71 808 492 -145 -586 248 -193 561 -809 -883 604 -838 -665 -652 798 -767 444 -750 133 -422 -45 -121 711 295 698 516 -96 228 -692 361 -344 60 58 533 -139 530 416 -251 -710 302 -788 727 606 918 865 -701 -76 -530 -184 -101 16 -192 -591 612 -222 -280 -437 -826 338 159 -338 -81 345 -607 682 709 172 143 -26 748 622 189 196 -877 -567 438 -522 505 872 -125 -811 -189 636 -879 926 566 212 -651 -590 -387 701 685 277 -354 381 -4 735 934 803 -250 392 183 448 -878 -367 18 -822 -340 767 -399 827 -85 -792 904 -611 442 793 -785 -212 -149 300 309 -770 -741 476 958 -805 -237 285 -909 209 -316 563 126 -227 860 -36 280 -299 -421 461 252 -43 -158 -572 -745 45 -960 -467 168 800 102 -455 721 548 569 -714 -22 -553 -582 -372 621 -562 -319 169 417 535 921 -332 757 -20 106 -201 -9 749 564 704 265 661 206 33 -178 -950 478 301 591 -307 -941 841 -175 -918 286 -872 -728 -898 -397 -687 -672 -89 842 776 -934 422 -529 258 187 -102 -323 -916 480 -413 390 -211 -460 603 -229 -314 805 -833 -661 -14 -108 -626 -312 -183 -255 -882 848 -128 -525 -818 -997 -994 995 19 208 930 -778 618 -490 -746 457";
-	if (argc == 1 || (argc == 2 && argv[1][0] == '\0'))
-		return (1);
-    a = NULL;
+	argc = 7;
+	argv[0] = "b" ;
+	argv[1] = "45 " ;
+	argv[2] = "24852455211511" ;
+	argv[3] = "3" ;
+	argv[4] = "5" ;
+	argv[5] = "4" ;
+	argv[6] = "6" ;
+	a = NULL;
 	b = NULL;
 	
-	if (!check_arg(argv[1]))
-		exit(1);
-	argv = ft_split(argv[1], ' ');
-	create_stack(&a, argv);
-	free_split(argv);
-	if (!check_duplicate(&a))
-		exit(1);
+	if (argc == 1 || (argc == 2 && argv[1][0] == '\0'))
+		return (1);
+	else if (argc == 2)
+		tab = ft_split(argv[1], ' ');
+	else
+	{
+		tab = create_tab(tab, argv, argc);
+	}
+	init_stack(&a, tab);
 	nb_node = set_index(&a);
 
-	// sa(&a);
-	// ra(&a);
-	// rra(&a);
-	// sort_three(&a);
-	// pb(&a, &b);
-	// pb(&a, &b);
-	// sb(&b);
-	// pb(&a, &b);
-	// pb(&a, &b);
-	// sb(&b);
-	// pb(&a, &b);
-	// pb(&a, &b);
-	// // pa(&a, &b);
-	// sb(&b);
-	// rb(&b);
-	// sb(&b);
-	// rb(&b);
-	// pb(&a, &b);
-	// pb(&a, &b);
-	// rrb(&b);
-	// rrr(&a, &b);
-	// rr(&a, &b);
-	// ss(&a, &b);
 	if (nb_node == 2 && is_sorted(&a) == 0)
 		sa(&a);
 	else if (nb_node == 3 && is_sorted(&a) == 0)
@@ -628,20 +676,8 @@ int main(int argc, char** argv)
 	// 	ft_printf("  ind : %d\n", cur->index);
 	// 	cur = cur->next;
 	// }
-	// if (is_sorted(&a) == 1)
-	// 	ft_printf("ok");
-	// while (argv[i] != NULL)
-	// {
-	// 	ft_printf("%s\n", argv[i]);
-	// 	i++;
-	// }
+	if (is_sorted(&a) == 1)
+		ft_printf("ok");
 	free_stack(&a);
-
-
-    // printf("Number of command-line arguments: %d\n", argc);
-    // printf("Program name: %s\n", argv[0]);
-    // for (int i = 1; i < argc; i++) {
-    //     printf("Argument %d: %s\n", i, argv[i]);
-    // }
     return 0;
 }

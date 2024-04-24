@@ -1,8 +1,8 @@
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
 
-#include <stdio.h>
-#include <stdlib.h>
+# include "libft/libft.h"
+# include "libft/ft_printf.h"
 
 typedef struct stack {
 	int		node;
@@ -60,5 +60,6 @@ void	init_stack(stack **a, char **argv);
 char	**create_tab(char **tab, char **argv, int argc);
 size_t	ft_strlen(char *str);
 size_t	nb_nodes(char **argv);
+char	**ft_split(char const *s, char c);
 
 #endif

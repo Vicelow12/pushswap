@@ -1,25 +1,57 @@
-SRCS    =       main.c push_swap.c
-OBJS    =       $(SRCS:.c=.o)
+NAME	=	push_swap
 
-CC      =       cc
-RM      =       rm -f
-CFLAGS  =       -Wall -Werror -Wextra -I. -MMD -MP
-DEPS    =       $(OBJS:.o=.d)
+# Directories
+LIBFT				= ./libft/libft.a
+SRC_DIR				= srcs/
+OBJ_DIR				= obj/
 
-NAME    =       push_swap.a
+# Compiler and Flags
+CC			= cc
+RM			= rm -f
+CFLAGS		= -Wall -Werror -Wextra -I. -MMD -MP
 
-all:    $(NAME)
+# Source Files
+COMMANDS_DIR		=	$(SRC_DIR)commands/push.c \
+						$(SRC_DIR)commands/reverse_rotate.c \
+						$(SRC_DIR)commands/rotate.c \
+						$(SRC_DIR)commands/swap.c
+
+PUSH_SWAP_DIR		=	$(SRC_DIR)push_swap/push_swap.c \
+						$(SRC_DIR)push_swap/ft_split.c \
+
+# Concatenate all source files
+SRCS				= $(COMMANDS_DIR) $(PUSH_SWAP_DIR)
+
+# Apply the pattern substitution to each source file in SRC and produce a corresponding list of object files in the OBJ_DIR
+OBJ					= $(patsubst $(SRC_DIR)%.c,$(OBJ_DIR)%.o,$(SRCS))
+DEPS    =       $(OBJ:.o=.d)
+# Build rules
+start:				
+					@make all
+
+$(LIBFT):
+					@make -C ./libft
+
+all: 				$(NAME)
 -include $(DEPS)
 
-$(NAME):        $(OBJS)
-	ar rcs $(NAME) $(OBJS)
+$(NAME):			$(OBJ) $(LIBFT)
+						@$(CC) $(CFLAGS) $(INC) $(OBJ) $(LIBFT) -o $(NAME)
+
+# Compile object files from source files
+$(OBJ_DIR)%.o:		$(SRC_DIR)%.c 
+									@mkdir -p $(@D)
+									@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-		$(RM) $(OBJS) $(DEPS)
+					@$(RM) -r $(OBJ_DIR) $(DEPS)
+					@make clean -C ./libft
 
-fclean:         clean
-		$(RM) $(NAME)
+fclean: 			clean
+						@$(RM) $(NAME)
+						@$(RM) $(LIBFT)
 
-re:             fclean $(NAME)
+re: 				fclean all
 
-.PHONY:         all clean fclean re
+# Phony targets represent actions not files
+.PHONY:			start all clean fclean re

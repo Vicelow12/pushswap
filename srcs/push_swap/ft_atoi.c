@@ -3,20 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ngaulthi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ngaulthi <ngaulthi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 11:30:32 by ngaulthi          #+#    #+#             */
-/*   Updated: 2023/11/22 17:07:29 by ngaulthi         ###   ########.fr       */
+/*   Updated: 2024/04/25 19:19:57 by ngaulthi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include <stdlib.h>
 
-int	ft_atoi(const char *nptr)
+#include "../../push_swap.h"
+
+int	ft_atoi(const char *nptr, stack **a, char **argv)
 {
-	size_t			i;
-	int			sign;
-	long int	result;
-	long int	overunder_check;
+	size_t	i;
+	int		sign;
+	int		result;
+	int		overunder_check;
 
 	result = 0;
 	i = 0;
@@ -27,15 +28,15 @@ int	ft_atoi(const char *nptr)
 		if (nptr[i++] == '-')
 			sign = sign * -1;
 	if (nptr[i] < '0' || nptr[i] > '9')
-		exit (1);
+		free_error (a, argv);
 	while (nptr[i] >= '0' && nptr[i] <= '9' && nptr[i] != '\0')
 	{
 		overunder_check = result;
 		result = (result * 10) + (nptr[i++] - '0');
 		if (overunder_check > result && sign > 0)
-			exit(1);
+			free_error (a, argv);
 		else if (overunder_check > result && sign < 0)
-			exit(1);
+			free_error (a, argv);
 	}
 	return ((int)(result * sign));
 }

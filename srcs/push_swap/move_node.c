@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   move_node.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ngaulthi <ngaulthi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/25 17:21:43 by ngaulthi          #+#    #+#             */
+/*   Updated: 2024/04/25 17:41:36 by ngaulthi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../push_swap.h"
 
 void	move_b_to_a(stack	**a, stack **b)
@@ -62,18 +74,24 @@ void	push_cost_below_median(stack *cur_a, size_t len_a, size_t len_b)
 {
 	cur_a->push_cost = (int)len_a - cur_a->pos;
 	cur_a->move_strat = 2;
-	if ((cur_a->target->above_median == 0) && (((int)len_b - cur_a->target->pos) - ((int)len_a - cur_a->pos) > 0))
+	if ((cur_a->target->above_median == 0)
+		&& (((int)len_b - cur_a->target->pos) - ((int)len_a - cur_a->pos) > 0))
 	{
-		cur_a->push_cost += ((int)len_b - cur_a->target->pos) - ((int)len_a - cur_a->pos);
+		cur_a->push_cost += ((int)len_b - cur_a->target->pos)
+			- ((int)len_a - cur_a->pos);
 	}
 	else if (cur_a->target->above_median == 1)
 	{
-		if ((((int)len_b - cur_a->target->pos) - ((int)len_a - cur_a->pos) < (cur_a->target->pos))
-			&& (((int)len_b - cur_a->target->pos) - ((int)len_a - cur_a->pos) > 0))
+		if ((((int)len_b - cur_a->target->pos)
+				- ((int)len_a - cur_a->pos) < (cur_a->target->pos))
+			&& (((int)len_b - cur_a->target->pos)
+				- ((int)len_a - cur_a->pos) > 0))
 		{
-			cur_a->push_cost += ((int)len_b - cur_a->target->pos) - ((int)len_a - cur_a->pos);
+			cur_a->push_cost += ((int)len_b - cur_a->target->pos)
+				- ((int)len_a - cur_a->pos);
 		}
-		else if((((int)len_b - cur_a->target->pos) - ((int)len_a - cur_a->pos) >= (cur_a->target->pos)))
+		else if ((((int)len_b - cur_a->target->pos)
+				- ((int)len_a - cur_a->pos) >= (cur_a->target->pos)))
 		{
 			cur_a->push_cost += (cur_a->target->pos);
 			cur_a->move_strat = 4;
@@ -97,7 +115,8 @@ void	push_cost_above_median(stack *cur_a, size_t len_b)
 		{
 			cur_a->push_cost += cur_a->target->pos - cur_a->pos;
 		}
-		else if ((cur_a->target->pos - cur_a->pos) >= ((int)len_b - cur_a->target->pos))
+		else if ((cur_a->target->pos - cur_a->pos)
+			>= ((int)len_b - cur_a->target->pos))
 		{
 			cur_a->push_cost += len_b - cur_a->target->pos;
 			cur_a->move_strat = 3;

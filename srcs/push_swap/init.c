@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ngaulthi <ngaulthi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/25 17:21:46 by ngaulthi          #+#    #+#             */
+/*   Updated: 2024/04/25 19:23:10 by ngaulthi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../push_swap.h"
 
 void	init_stack(stack **a, char **argv)
@@ -21,20 +33,20 @@ void	init_stack(stack **a, char **argv)
 		free_error(a, NULL);
 }
 
-
-
 void	create_stack(stack **a, char **argv, size_t argc, size_t i)
 {
 	stack	*new_node;
 	stack	*cur;
+	int		check;
 
 	while (i < argc)
 	{
+		check = ft_atoi(argv[i], a, argv);
 		new_node = malloc(sizeof(stack));
 		if (!new_node)
 			free_error(a, argv);
 		new_node->next = NULL;
-		new_node->node = ft_atoi(argv[i]);
+		new_node->node = check;
 		if (!*a)
 		{
 			*a = new_node;

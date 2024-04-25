@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handle_error.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ngaulthi <ngaulthi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/25 17:22:02 by ngaulthi          #+#    #+#             */
+/*   Updated: 2024/04/25 19:23:36 by ngaulthi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../push_swap.h"
 
 int	check_arg(char	*arg)
@@ -12,6 +24,8 @@ int	check_arg(char	*arg)
 		if (arg[i] < '0' || arg[i] > '9')
 		{
 			if (arg[i] != '+' && arg[i] != '-' && arg[i] != ' ')
+				return (0);
+			else if (i != 0)
 				return (0);
 		}
 		else
@@ -55,7 +69,6 @@ void	free_stack(stack **a)
 		mem = cur;
 		cur = cur->next;
 		free(mem);
-		cur = mem;
 	}
 	*a = NULL;
 }
@@ -69,10 +82,9 @@ void	free_split(char **argv)
 	{
 		i--;
 		if (argv[i] != NULL)
-			free(argv[i]);	
+			free(argv[i]);
 	}
 	free(argv);
-	return ((void *)0);
 }
 
 void	free_error(stack	**a, char **tab)

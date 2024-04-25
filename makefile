@@ -8,7 +8,7 @@ OBJ_DIR				= obj/
 # Compiler and Flags
 CC			= cc
 RM			= rm -f
-CFLAGS		= -Wall -Werror -Wextra -I. -MMD -MP
+CFLAGS		= -g3 -Wall -Werror -Wextra -I. -MMD -MP
 
 # Source Files
 COMMANDS_DIR		=	$(SRC_DIR)commands/push.c \
@@ -24,6 +24,7 @@ PUSH_SWAP_DIR		=	$(SRC_DIR)push_swap/push_swap.c \
 						$(SRC_DIR)push_swap/sort.c \
 						$(SRC_DIR)push_swap/move_strat.c \
 						$(SRC_DIR)push_swap/init_node.c \
+						$(SRC_DIR)push_swap/ft_atoi.c \
 						$(SRC_DIR)push_swap/move_node.c 
 
 # Concatenate all source files

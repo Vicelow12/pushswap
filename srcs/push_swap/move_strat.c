@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   move_strat.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ngaulthi <ngaulthi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/25 17:21:41 by ngaulthi          #+#    #+#             */
+/*   Updated: 2024/04/25 17:35:56 by ngaulthi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../push_swap.h"
 
 void	move_1(stack **a, stack	**b, stack *cheapest)
 {
-	while (cheapest->pos > 0 && cheapest->target->pos >0)
+	while (cheapest->pos > 0 && cheapest->target->pos > 0)
 	{
 		rr(a, b);
 		cheapest->pos--;
@@ -13,7 +25,7 @@ void	move_1(stack **a, stack	**b, stack *cheapest)
 		ra(a);
 		cheapest->pos--;
 	}
-	while (cheapest->target->pos >0)
+	while (cheapest->target->pos > 0)
 	{
 		rb(b);
 		cheapest->target->pos--;
@@ -72,7 +84,7 @@ void	move_4(stack **a, stack	**b, stack *cheapest)
 		rra(a);
 		cheapest->pos++;
 	}
-	while (cheapest->target->pos >0)
+	while (cheapest->target->pos > 0)
 	{
 		rb(b);
 		cheapest->target->pos--;

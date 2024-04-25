@@ -8,8 +8,7 @@ CC	=	cc
 RM	=	rm -f
 CFLAGS	=	-Wall -Wextra -Werror -I. -MMD -MP
 
-SRCS	=	$(SRC_DIR)ft_atoi.c \
-			$(SRC_DIR)ft_strdup.c  \
+SRCS	=	$(SRC_DIR)ft_strdup.c  \
 			$(SRC_DIR)ft_printf.c \
 			$(SRC_DIR)printf_utility.c
 

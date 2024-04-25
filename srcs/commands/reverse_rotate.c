@@ -7,7 +7,7 @@ void	reverse_rotate(stack **stk)
 	size_t	i;
 
 	if (*stk == NULL)
-		return;
+		return ;
 	cur = *stk;
 	prev_cur = *stk;
 	i = 0;

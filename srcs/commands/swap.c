@@ -11,10 +11,8 @@ void	swap(stack **stk)
 	{
 		tmp_node = (*stk)->node;
 		tmp_index = (*stk)->index;
-
 		(*stk)->node = (*stk)->next->node;
 		(*stk)->index = (*stk)->next->index;
-
 		(*stk)->next->node = tmp_node;
 		(*stk)->next->index = tmp_index;
 	}
@@ -28,8 +26,8 @@ void	sa(stack **a)
 
 void	sb(stack **b)
 {
-    swap(b);
-    ft_printf("sb\n");
+	swap(b);
+	ft_printf("sb\n");
 }
 
 void	ss(stack **a, stack **b)

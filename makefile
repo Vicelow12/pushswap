@@ -18,6 +18,13 @@ COMMANDS_DIR		=	$(SRC_DIR)commands/push.c \
 
 PUSH_SWAP_DIR		=	$(SRC_DIR)push_swap/push_swap.c \
 						$(SRC_DIR)push_swap/ft_split.c \
+						$(SRC_DIR)push_swap/init.c \
+						$(SRC_DIR)push_swap/handle_error.c \
+						$(SRC_DIR)push_swap/push_swap_utils.c \
+						$(SRC_DIR)push_swap/sort.c \
+						$(SRC_DIR)push_swap/move_strat.c \
+						$(SRC_DIR)push_swap/init_node.c \
+						$(SRC_DIR)push_swap/move_node.c 
 
 # Concatenate all source files
 SRCS				= $(COMMANDS_DIR) $(PUSH_SWAP_DIR)
@@ -29,8 +36,10 @@ DEPS    =       $(OBJ:.o=.d)
 start:				
 					@make all
 
-$(LIBFT):
+$(LIBFT): FORCE
 					@make -C ./libft
+
+FORCE :
 
 all: 				$(NAME)
 -include $(DEPS)

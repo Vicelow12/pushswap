@@ -16,7 +16,7 @@ static	size_t	count_word(char const *s, char c)
 {
 	size_t	count;
 	size_t	i;
-	int	fl;
+	int		fl;
 
 	i = 0;
 	count = 0;
@@ -49,7 +49,7 @@ static	void	*secure_malloc(char **tab, int i)
 
 static	char	*malloc_str(char const *s, char c, size_t *step)
 {
-	size_t		nb_letter;
+	size_t	nb_letter;
 	char	*str;
 
 	nb_letter = 0;
@@ -84,7 +84,7 @@ static	void	tab_fill(const char *s, char c, size_t *step, char *strfill)
 
 char	**ft_split(char const *s, char c)
 {
-	char	**tab;
+	char		**tab;
 	size_t		i;
 	size_t		j;
 	size_t		step;
@@ -109,22 +109,3 @@ char	**ft_split(char const *s, char c)
 	tab[i] = NULL;
 	return (tab);
 }
-/*
-#include <stdio.h>
-int	main(void)
-{
-	char	*s = "//q/";
-	char	c = '/';
-	char	**tab;
-	int	i;
-
-	i = 0;
-	tab = ft_split(s, c);
-	printf("%s", tab[0]);
-	printf("%s", tab[1]);
-	while (tab[i])
-	{
-		printf("%s", tab[i]);
-		i++;
-	}
-}*/

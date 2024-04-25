@@ -6,7 +6,7 @@ void	rotate(stack **stk)
 	stack	*mem;
 
 	if (*stk == NULL)
-		return;
+		return ;
 	cur = *stk;
 	mem = cur;
 	if ((*stk)->next != NULL)
